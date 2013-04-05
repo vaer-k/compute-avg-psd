@@ -20,12 +20,12 @@ from mne.minimum_norm import read_inverse_operator, compute_source_psd_epochs, a
 ###############################################################################
 # Set parameters
 # (Better, more flexible parameter setting to be added here)
-data_path = '/home/vrupp/data/restMEG/' 
+data_path = '/data/MITRSMEG/' 
 subj = raw_input('Subject ID:')
 fname_raw = data_path + subj + '/' + subj + '_rest_raw_sss.fif'  
 fname_fwd = data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-fwd.fif'
-label_name = 'lh.BA45' # how can we do both hemi simultaneously? 
-fname_label = '/home/vrupp/data/freesurfer/subjects/' + subj + '/' + 'label/%s.label' % label_name 
+label_name = raw_input('Which region label would you like to compute PSD for?\n')
+fname_label = '/data/freesurfer_recons/MITRSMEG/' + subj + '/' + 'label/%s.label' % label_name 
 
 event_id, tmin, tmax = 1, 0.0, 4.0
 snr = 1.0 
