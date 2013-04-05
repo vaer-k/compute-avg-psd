@@ -1,6 +1,6 @@
 """
 ==================
-   Epoch Poetry
+   compute_psd
 ==================
 
 Epochs resting MEG data into 4 second intervals, removes EOG artifacts, computes noise covariance, inverse operator and PSD.
