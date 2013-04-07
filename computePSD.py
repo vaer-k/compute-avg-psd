@@ -6,7 +6,7 @@
 Epochs resting MEG data into 4 second intervals, removes EOG artifacts, computes noise covariance, inverse operator and PSD.
 
 """
-# Authors: Vincent Rupp Jr. <<vrupp@rohan.sdsu.edu>>; Morgan Hough <<morgan@gazzaleylab.ucsf.edu>>
+# Authors: Vincent Rupp Jr. <<ruppjr@hawaii.edu>>; Morgan Hough <<morgan@gazzaleylab.ucsf.edu>>
 
 print __doc__
 
@@ -20,7 +20,7 @@ from mne.minimum_norm import read_inverse_operator, compute_source_psd_epochs, a
 ###############################################################################
 # Set parameters
 # (Better, more flexible parameter setting to be added here)
-data_path = '/data/MITRSMEG/' 
+data_path = '/data/restMEG/' 
 subj = raw_input('Subject ID:')
 fname_raw = data_path + subj + '/' + subj + '_rest_raw_sss.fif'  
 fname_fwd = data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-fwd.fif'
@@ -61,8 +61,8 @@ epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,
 		reject=dict(grad=4000e-13, mag=4e-12, eog=150e-6))
 
 # Compute the inverse solution
-stc = apply_inverse_epochs(epochs, inverse_operator, lambda2, method)
-#stc.save(data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-inv.fif')
+inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method)
+inv.save(data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-inv.fif')
 
 # define frequencies of interest
 fmin, fmax = 0., 70.
@@ -74,10 +74,10 @@ bandwidth = 4.  # bandwidth of the windows in Hz
 # instead of a list. This allows us so to iterate without having to
 # keep everything in memory.
 
-stcs = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
+psd = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
                                  method=method, fmin=fmin, fmax=fmax,
                                  bandwidth=bandwidth, label=label, return_generator=True)
-#stcs.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
+#psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
 
 # compute average PSD over the first 10 epochs
 n_epochs = 10
