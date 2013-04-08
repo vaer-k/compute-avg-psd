@@ -77,11 +77,11 @@ bandwidth = 4.  # bandwidth of the windows in Hz
 psd = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
                                  method=method, fmin=fmin, fmax=fmax,
                                  bandwidth=bandwidth, label=label, return_generator=False)
-#psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
+psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
 
 # compute average PSD over the first 10 epochs
 n_epochs = 10
-for i, stc in enumerate(stcs):
+for i, stc in enumerate(psd):
     if i >= n_epochs:
         break
 
@@ -98,4 +98,3 @@ pl.plot(freqs, psd_avg)
 pl.xlabel('Freq (Hz)')
 pl.ylabel('Power Spectral Density')
 pl.show()
-
