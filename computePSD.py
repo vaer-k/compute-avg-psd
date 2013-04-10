@@ -1,3 +1,5 @@
+#! /usr/local/bin/python
+
 """
 ==================
    compute_psd
