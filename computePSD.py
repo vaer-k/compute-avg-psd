@@ -62,7 +62,11 @@ epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,
 
 # Compute the inverse solution
 inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=label)
-inv.save(data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-inv.fif')
+
+epoch_num = 1
+for i in inv:
+	i.save(data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num + '.fif')
+	epoch_num = epoch_num + 1
 
 # define frequencies of interest
 fmin, fmax = 0., 70.
@@ -77,7 +81,7 @@ bandwidth = 4.  # bandwidth of the windows in Hz
 psd = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
                                  method=method, fmin=fmin, fmax=fmax,
                                  bandwidth=bandwidth, label=label, return_generator=False)
-psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
+#psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
 
 # compute average PSD over the first 10 epochs
 n_epochs = 10
