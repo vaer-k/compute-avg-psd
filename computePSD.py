@@ -1,4 +1,4 @@
-#! /usr/local/bin/python
+#! /usr/bin/python
 
 """
 ==================
@@ -66,9 +66,11 @@ epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,
 inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=label)
 
 epoch_num = 1
+epoch_num_str = str(epoch_num)
 for i in inv:
-	i.save(data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num + '.fif')
+	i.save(data_path + subj + '/stc/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str + '.fif')
 	epoch_num = epoch_num + 1
+	epoch_num_str = str(epoch_num)
 
 # define frequencies of interest
 fmin, fmax = 0., 70.
