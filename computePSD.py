@@ -15,19 +15,24 @@ print __doc__
 import numpy as np
 import pylab as pl
 import mne
+import os
 from mne import fiff, write_cov
 from mne.fiff import Raw, pick_types
 from mne.minimum_norm import read_inverse_operator, compute_source_psd_epochs, apply_inverse_epochs, write_inverse_operator, make_inverse_operator
 
 ###############################################################################
 # Set parameters
-# (Better, more flexible parameter setting to be added here)
 data_path = '/data/restMEG/' 
 subj = raw_input('Subject ID:')
 fname_raw = data_path + subj + '/' + subj + '_rest_raw_sss.fif'  
 fname_fwd = data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-fwd.fif'
 label_name = raw_input('Which region label would you like to compute PSD for?\n')
 fname_label = '/data/freesurfer_recons/MITRSMEG/' + subj + '/' + 'label/%s.label' % label_name 
+
+if label_name.startswith('lh.'):
+	hemi = 'left'
+elif label_name.startswith('rh.'):
+	hemi = 'right'	
 
 event_id, tmin, tmax = 1, 0.0, 4.0
 snr = 1.0 
@@ -65,12 +70,24 @@ epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,
 # Compute the inverse solution
 inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=label)
 
+#Need to add a line here to automatically create stc directory within subj
+#
+
 epoch_num = 1
 epoch_num_str = str(epoch_num)
 for i in inv:
-	i.save(data_path + subj + '/stc/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str + '.fif')
+	i.save(data_path + subj + '/stc/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
 	epoch_num = epoch_num + 1
 	epoch_num_str = str(epoch_num)
+
+if hemi == 'left':
+	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'stc') if f.endswith("-rh.stc") ]	
+	for f in filelist:
+		os.remove("/data/restMEG/" + subj + '/' + 'stc' + '/' + f)
+elif hemi == 'right':
+	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'stc') if f.endswith("-lh.stc") ]
+        for f in filelist:
+                os.remove("/data/restMEG/" + subj + '/' + 'stc' + '/' + f)
 
 # define frequencies of interest
 fmin, fmax = 0., 70.
