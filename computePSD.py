@@ -76,18 +76,18 @@ inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=labe
 epoch_num = 1
 epoch_num_str = str(epoch_num)
 for i in inv:
-	i.save(data_path + subj + '/stc/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
+	i.save(data_path + subj + '/inv/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
 	epoch_num = epoch_num + 1
 	epoch_num_str = str(epoch_num)
 
 if hemi == 'left':
-	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'stc') if f.endswith("-rh.stc") ]	
+	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'inv') if f.endswith("-rh.stc") ]	
 	for f in filelist:
-		os.remove("/data/restMEG/" + subj + '/' + 'stc' + '/' + f)
+		os.remove("/data/restMEG/" + subj + '/' + 'inv' + '/' + f)
 elif hemi == 'right':
-	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'stc') if f.endswith("-lh.stc") ]
+	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'inv') if f.endswith("-lh.stc") ]
         for f in filelist:
-                os.remove("/data/restMEG/" + subj + '/' + 'stc' + '/' + f)
+                os.remove("/data/restMEG/" + subj + '/' + 'inv' + '/' + f)
 
 # define frequencies of interest
 fmin, fmax = 0., 70.
@@ -102,6 +102,23 @@ bandwidth = 4.  # bandwidth of the windows in Hz
 psd = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
                                  method=method, fmin=fmin, fmax=fmax,
                                  bandwidth=bandwidth, label=label, return_generator=False)
+
+epoch_num = 1
+epoch_num_str = str(epoch_num)
+for i in psd:
+	i.save('/data/restMEG/' + subj + '/' + 'psd' + '/' + 'dspm_snr-1_PSD'+ epoch_num_str)
+	epoch_num = epoch_num + 1
+        epoch_num_str = str(epoch_num)
+
+if hemi == 'left':
+        filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'psd') if f.endswith("-rh.stc") ]
+        for f in filelist:
+                os.remove("/data/restMEG/" + subj + '/' + 'psd' + '/' + f)
+elif hemi == 'right':
+        filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'psd') if f.endswith("-lh.stc") ]
+        for f in filelist:
+                os.remove("/data/restMEG/" + subj + '/' + 'psd' + '/' + f)
+
 #psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
 
 # compute average PSD over the first 10 epochs
