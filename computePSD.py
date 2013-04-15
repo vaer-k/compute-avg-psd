@@ -76,18 +76,31 @@ inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=labe
 epoch_num = 1
 epoch_num_str = str(epoch_num)
 for i in inv:
-	i.save(data_path + subj + '/inv/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
+	i.save(data_path + subj + '/tmp/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
 	epoch_num = epoch_num + 1
 	epoch_num_str = str(epoch_num)
 
+# The following is used to remove the empty opposing hemisphere files
+# and then move the files to save into the appropriate directory
+
 if hemi == 'left':
-	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'inv') if f.endswith("-rh.stc") ]	
+	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-rh.stc") ]	
 	for f in filelist:
-		os.remove("/data/restMEG/" + subj + '/' + 'inv' + '/' + f)
+		os.remove("/data/restMEG/" + subj + '/tmp/' + f)
+	keepers = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-lh.stc") ]
+	for f in keepers:
+	        src = f 
+		os.rename("/data/restMEG/" + subj + '/tmp/' + src,"/data/restMEG/" + subj + '/inv/' + src)
+
 elif hemi == 'right':
-	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'inv') if f.endswith("-lh.stc") ]
+	filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-lh.stc") ]
         for f in filelist:
-                os.remove("/data/restMEG/" + subj + '/' + 'inv' + '/' + f)
+                os.remove("/data/restMEG/" + subj + '/tmp/' + f)
+	keepers = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-rh.stc") ]
+        for f in keepers:
+                src = f 
+		os.rename("/data/restMEG/" + subj + '/tmp/' + src,"/data/restMEG/" + subj + '/inv/' + src)
+
 
 # define frequencies of interest
 fmin, fmax = 0., 70.
@@ -106,20 +119,27 @@ psd = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
 epoch_num = 1
 epoch_num_str = str(epoch_num)
 for i in psd:
-	i.save('/data/restMEG/' + subj + '/' + 'psd' + '/' + 'dspm_snr-1_PSD'+ epoch_num_str)
+	i.save('/data/restMEG/' + subj + '/' + 'tmp' + '/' + 'dspm_snr-1_PSD'+ epoch_num_str)
 	epoch_num = epoch_num + 1
         epoch_num_str = str(epoch_num)
 
 if hemi == 'left':
-        filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'psd') if f.endswith("-rh.stc") ]
+        filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-rh.stc") ]
         for f in filelist:
-                os.remove("/data/restMEG/" + subj + '/' + 'psd' + '/' + f)
-elif hemi == 'right':
-        filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/' + 'psd') if f.endswith("-lh.stc") ]
-        for f in filelist:
-                os.remove("/data/restMEG/" + subj + '/' + 'psd' + '/' + f)
+                os.remove("/data/restMEG/" + subj + '/tmp/' + f)
+	keepers = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-lh.stc") ]
+        for f in keepers:
+                src = f
+                os.rename("/data/restMEG/" + subj + '/tmp/' + src,"/data/restMEG/" + subj + '/psd/' + src)
 
-#psd.save('/usr/local/freesurfer/subjects/' + subj + '/meg/dspm_snr-1_PSD_stc')
+elif hemi == 'right':
+        filelist = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-lh.stc") ]
+        for f in filelist:
+                os.remove("/data/restMEG/" + subj + '/tmp/' + f)
+	keepers = [ f for f in os.listdir("/data/restMEG/" + subj + '/tmp') if f.endswith("-rh.stc") ]
+        for f in keepers:
+                src = f
+                os.rename("/data/restMEG/" + subj + '/tmp/' + src,"/data/restMEG/" + subj + '/psd/' + src)
 
 # compute average PSD over the first 10 epochs
 n_epochs = 10
