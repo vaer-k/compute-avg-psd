@@ -76,7 +76,7 @@ inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=labe
 epoch_num = 1
 epoch_num_str = str(epoch_num)
 for i in inv:
-	i.save(data_path + subj + '/tmp/' + subj + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
+	i.save(data_path + subj + '/tmp/' + label_name[3:] + '_rest_raw_sss-oct-6-inv' + epoch_num_str)
 	epoch_num = epoch_num + 1
 	epoch_num_str = str(epoch_num)
 
@@ -119,7 +119,7 @@ psd = compute_source_psd_epochs(epochs, inverse_operator, lambda2=lambda2,
 epoch_num = 1
 epoch_num_str = str(epoch_num)
 for i in psd:
-	i.save('/data/restMEG/' + subj + '/' + 'tmp' + '/' + 'dspm_snr-1_PSD'+ epoch_num_str)
+	i.save('/data/restMEG/' + subj + '/' + 'tmp' + '/' + label_name[3:] + '_dspm_snr-1_PSD'+ epoch_num_str)
 	epoch_num = epoch_num + 1
         epoch_num_str = str(epoch_num)
 
