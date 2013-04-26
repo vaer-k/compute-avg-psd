@@ -67,6 +67,8 @@ epochs = mne.Epochs(raw, events, event_id, tmin, tmax, proj=True,
 		picks=picks, baseline=(None, 0), preload=True, 
 		reject=dict(grad=4000e-13, mag=4e-12, eog=150e-6))
 
+epc_array = epochs.get_data()
+
 # Compute the inverse solution
 inv = apply_inverse_epochs(epochs, inverse_operator, lambda2, method, label=label)
 
@@ -142,7 +144,7 @@ elif hemi == 'right':
                 os.rename("/data/restMEG/" + subj + '/tmp/' + src,"/data/restMEG/" + subj + '/psd/' + src)
 
 # compute average PSD over the first 10 epochs
-n_epochs = 10
+n_epochs = len(epc_array)
 for i, stc in enumerate(psd):
     if i >= n_epochs:
         break
