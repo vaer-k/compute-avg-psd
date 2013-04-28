@@ -27,6 +27,8 @@ subj = raw_input('Subject ID:')
 fname_raw = data_path + subj + '/' + subj + '_rest_raw_sss.fif'  
 fname_fwd = data_path + subj + '/' + subj + '_rest_raw_sss-oct-6-fwd.fif'
 label_name = raw_input('Which region label would you like to compute PSD for?\n')
+fmin = float(raw_input('fmin:'))
+fmax = float(raw_input('fmax:')) 
 fname_label = '/data/freesurfer_recons/MITRSMEG/' + subj + '/' + 'label/%s.label' % label_name 
 
 if label_name.startswith('lh.'):
@@ -106,7 +108,6 @@ elif hemi == 'right':
 
 
 # define frequencies of interest
-fmin, fmax = 0., 70.
 bandwidth = 4.  # bandwidth of the windows in Hz
 
 # compute source space psd in label
