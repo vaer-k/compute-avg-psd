@@ -14,6 +14,7 @@ print __doc__
 
 import numpy as np
 import pylab as pl
+import scipy
 import mne
 import os
 from mne import fiff, write_cov
@@ -164,3 +165,25 @@ pl.plot(freqs, psd_avg)
 pl.xlabel('Freq (Hz)')
 pl.ylabel('Power Spectral Density')
 pl.show()
+
+# Compute and plot regression of high gamma
+n_epochs = len(epc_array)
+for i, stc in enumerate(psd):
+    if i >= n_epochs:
+        break
+
+    if i == 0:
+        psd_avg = np.mean(stc.data, axis=0)
+    else:
+        psd_avg += np.mean(stc.data, axis=0)
+
+psd_avg /= n_epochs
+freqs = [i for i in list(stc.times) if i >= 80.0]
+line = scipy.stats.linregress(freqs, ??????)
+
+pl.figure()
+pl.plot(line)
+pl.xlabel('Freq (Hz)')
+pl.ylabel('Power Spectral Density')
+pl.show()
+
