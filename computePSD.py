@@ -146,28 +146,30 @@ elif hemi == 'right':
                 src = f
                 os.rename("/data/restMEG/" + subj + '/tmp/' + src,"/data/restMEG/" + subj + '/psd/' + src)
 
-# compute average PSD over every epoch
-n_epochs = len(epc_array)
-for i, stc in enumerate(psd):
-    if i >= n_epochs:
-        break
-
-    if i == 0:
-        psd_avg = np.mean(stc.data, axis=0)
-    else:
-        psd_avg += np.mean(stc.data, axis=0)
-
-psd_avg /= n_epochs
-freqs = stc.times  # the frequencies are stored here
-
-pl.figure()
-pl.plot(freqs, psd_avg)
-pl.xlabel('Freq (Hz)')
-pl.ylabel('Power Spectral Density')
-pl.show()
+# compute average PSD over every epoch (this is the original plot routine)
+#n_epochs = len(epc_array)
+#for i, stc in enumerate(psd):
+#    if i >= n_epochs:
+#        break
+#
+#    if i == 0:
+#        psd_avg = np.mean(stc.data, axis=0)
+#    else:
+#        psd_avg += np.mean(stc.data, axis=0)
+#
+#psd_avg /= n_epochs
+#freqs = stc.times  # the frequencies are stored here
+#
+#pl.figure()
+#pl.plot(freqs, psd_avg)
+#pl.xlabel('Freq (Hz)')
+#pl.ylabel('Power Spectral Density')
+#pl.show()
 
 # Compute and plot regression of high gamma
-n_epochs = len(epc_array)
+#n_epochs = len(epc_array)
+
+n_epochs = len(epc_array) 
 for i, stc in enumerate(psd):
     if i >= n_epochs:
         break
@@ -178,12 +180,11 @@ for i, stc in enumerate(psd):
         psd_avg += np.mean(stc.data, axis=0)
 
 psd_avg /= n_epochs
-freqs = [i for i in list(stc.times) if i >= 80.0]
-line = scipy.stats.linregress(freqs, ??????)
+freqs = stc.times
+line = scipy.stats.linregress(freqs, psd_avg)
 
 pl.figure()
 pl.plot(line)
 pl.xlabel('Freq (Hz)')
 pl.ylabel('Power Spectral Density')
 pl.show()
-
